@@ -1,4 +1,4 @@
-name: Build EarnMate APK
+name: Build WavyChat APK
 
 on:
   workflow_dispatch:
@@ -11,25 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.0'
           channel: stable
 
-      - name: Create Flutter project
-        run: |
-          flutter create earnmate
-          cd earnmate
+      - name: Get dependencies
+        run: flutter pub get
 
       - name: Build APK
-        working-directory: earnmate
-        run: |
-          flutter pub get
-          flutter build apk --debug
+        run: flutter build apk --debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: EarnMate-debug
-          path: earnmate/build/app/outputs/flutter-apk/app-debug.apk
+          name: wavychat-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
