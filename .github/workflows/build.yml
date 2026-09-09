@@ -1,0 +1,35 @@
+name: Build EarnMate APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.0'
+          channel: stable
+
+      - name: Create Flutter project
+        run: |
+          flutter create earnmate
+          cd earnmate
+
+      - name: Build APK
+        working-directory: earnmate
+        run: |
+          flutter pub get
+          flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EarnMate-debug
+          path: earnmate/build/app/outputs/flutter-apk/app-debug.apk
